@@ -1,0 +1,49 @@
+﻿<style>
+    .no_margin {
+        margin-right:0px;margin-left:0px;
+    }
+    .no_padding {
+        padding-right:0px;padding-left:0px;
+    }
+</style>
+
+<div class="row row-margin-bottom row-margin-top">
+    <div class="col-md-4 no-padding lib-item" data-category="view" ng-repeat="row in mdc.movieList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+        <div class="lib-panel">
+            <div class="row box-shadow no_margin">
+                <div class="col-md-5 no_padding">
+                    <img class="lib-img-show" src="{{row.Poster}}">                                      
+                </div>
+                <div class="col-md-7" style="padding-left:0px;padding-right: 0px;">
+                    <i ng-class="{'fa-check-circle': row.IsAddedToWatchKist, 'fa-plus-circle': !row.IsAddedToWatchKist}"
+                       class="fas fa-2x"
+                       style="position: absolute;right: 5px;top: 5px;"
+                       ng-style="row.IsAddedToWatchKist == false  && {'color': '#dadada', 'cursor' : 'pointer'} || row.IsAddedToWatchKist == true && {'color': 'green'}"></i>
+                    <div class="lib-row lib-header" title=" {{row.Title}}">
+                         {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
+                    </div>
+                    <p class="lib-row" style="color: #9e9e9e;font-size: 14px;">
+                        <span class="">{{row.Year}}</span>&nbsp;|
+                        <span class="">{{row.Runtime}}</span>&nbsp;|&nbsp;
+                        <span class="">{{row.Genre}}</span>
+                    </p>
+                    <p class="lib-row" style="font-size:12px;font-weight:bold;">
+                        <span class="" style="color:gray;"><i class="fas fa-star" style="color:gold;margin-right:2px;"></i>{{row.imdbRating}}</span>&nbsp;
+                        <span class="label label-success ng-binding" style="padding: 3px;margin-right: 3px;">{{row.Metascore}}</span>Metascore
+                    </p>
+                    <p class="lib-row" style="color: #9e9e9e;font-size: 12px;">
+                        <span class="">Director : {{row.Director}}</span>
+                    </p>
+                    <p class="lib-row" style="color: #9e9e9e;font-size: 12px;"  title="{{row.Actors}}">
+                        <span class="">Actors : {{ row.Actors.length > 45 && row.Actors.substring(0, 45) + " ..." || row.Actors }}</span>
+                    </p>
+                    <div class="lib-row lib-desc" title="{{row.Plot}}">
+                        {{ row.Plot.length > 75 && row.Plot.substring(0, 75) + " ..." || row.Plot }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></ul>

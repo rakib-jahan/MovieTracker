@@ -1,0 +1,36 @@
+﻿@model MovieTracker.Models.Login
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/login-registration.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <p id="profile-name" class="profile-name-card"></p>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-signin">
+                <span id="reauth-email" class="reauth-email"></span>
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Email address", @Value = "rakib.cse.sust@gmail.com" } })
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", @Value = "1" } })
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Create account", "Registration", new { @class = "forgot-password" })
+        </div>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+
+    </div>
+</div>
