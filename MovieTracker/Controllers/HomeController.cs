@@ -12,6 +12,7 @@ namespace MovieTracker.Controllers
         public ActionResult Index()
         {
             Session["IsAuthenticated"] = true;
+            ViewBag.UserFullName = "Rakib Jahan Khan";
             return View();
         }
 
@@ -66,6 +67,13 @@ namespace MovieTracker.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session["IsAuthenticated"] = false;
+            return RedirectToAction("Login");
         }
     }
 }

@@ -18,7 +18,7 @@
                     <i ng-class="{'fa-check-circle': row.IsAddedToWatchKist, 'fa-plus-circle': !row.IsAddedToWatchKist}"
                        class="fas fa-2x"
                        style="position: absolute;right: 5px;top: 5px;"
-                       ng-style="row.IsAddedToWatchKist == false  && {'color': '#dadada', 'cursor' : 'pointer'} || row.IsAddedToWatchKist == true && {'color': 'green'}"></i>
+                       ng-style="row.IsAddedToWatchKist == false  && {'color': '#dadada'} || row.IsAddedToWatchKist == true && {'color': 'green'}" data-ng-click="updateStatus(row)"></i>
                     <div class="lib-row lib-header" title=" {{row.Title}}">
                          {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
                     </div>

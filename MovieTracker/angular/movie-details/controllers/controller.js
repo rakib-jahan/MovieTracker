@@ -41,7 +41,7 @@
                     "Poster": "https://m.media-amazon.com/images/M/MV5BNGNiNWQ5M2MtNGI0OC00MDA2LWI5NzEtMmZiYjVjMDEyOWYzXkEyXkFqcGdeQXVyMjM4NTM5NDY@._V1_UX182_CR0,0,182,268_AL_.jpg",
                     "Metascore": "87",
                     "imdbRating": "7.3",
-                    "IsAddedToWatchKist": false
+                    "IsAddedToWatchKist": true
                 },
                 {
                     "Title": "Moonlight (I)",
@@ -222,6 +222,10 @@
 
         $scope.setPage = function (pageNo) {
             $scope.currentPage = pageNo;
-        };              
+        };   
+
+        $scope.updateStatus = function (obj) {
+            
+        };
     }
 })();
