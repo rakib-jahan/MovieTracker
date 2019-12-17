@@ -1,4 +1,5 @@
-﻿using MovieTracker.Models;
+﻿using MovieTracker.DAL;
+using MovieTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,15 @@ namespace MovieTracker.Controllers
         [HttpPost]
         public ActionResult Registration(UserRegistration userRegistration)
         {
+            UserManager userManager = new UserManager();
+
+            userManager.InsertUser(new DAL.User { 
+                Id = userRegistration.Id, 
+                Password = userRegistration.Password,
+                UserFullName = userRegistration.UserFullName,
+                UserName = userRegistration.UserName
+            });
+
             ModelState.Clear();
             ViewBag.Message = "Your contact page.";
 
