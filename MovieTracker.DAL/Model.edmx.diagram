@@ -9,6 +9,13 @@
         <EntityTypeShape EntityType="MovieTrackerModel.Movie" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="MovieTrackerModel.User" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="MovieTrackerModel.FK_Movie_Genre" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MovieTrackerModel.Status" Width="1.5" PointX="8" PointY="5.875" />
+        <EntityTypeShape EntityType="MovieTrackerModel.UserMovieDetail" Width="1.5" PointX="10.25" PointY="1.5" />
+        <EntityTypeShape EntityType="MovieTrackerModel.UserMovieMapping" Width="1.5" PointX="8" PointY="1.5" />
+        <AssociationConnector Association="MovieTrackerModel.FK_UserMovieMapping_Movie" />
+        <AssociationConnector Association="MovieTrackerModel.FK_UserMovieDetails_Status" />
+        <AssociationConnector Association="MovieTrackerModel.FK_UserMovieMapping_User" />
+        <AssociationConnector Association="MovieTrackerModel.FK_UserMovieDetails_UserMovieDetails" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

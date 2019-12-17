@@ -4,12 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MovieTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MovieTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Genre">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GenreName" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Movie">
@@ -26,7 +26,14 @@
           <Property Name="Poster" Type="nvarchar" MaxLength="300" />
           <Property Name="Metascore" Type="nvarchar" MaxLength="10" />
           <Property Name="ImdbRating" Type="nvarchar" MaxLength="10" />
-          <Property Name="GenreId" Type="tinyint" />
+          <Property Name="GenreId" Type="int" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -36,6 +43,24 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="50" />
           <Property Name="UserFullName" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserMovieDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserMovieMappingId" Type="int" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="UserRating" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserMovieMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="MovieId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Movie_Genre">
           <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
@@ -49,17 +74,83 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserMovieDetails_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="UserMovieDetails" Type="Self.UserMovieDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieDetails">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieDetails_UserMovieDetails">
+          <End Role="UserMovieMapping" Type="Self.UserMovieMapping" Multiplicity="1" />
+          <End Role="UserMovieDetails" Type="Self.UserMovieDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMovieMapping">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieDetails">
+              <PropertyRef Name="UserMovieMappingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieMapping_Movie">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+          <End Role="UserMovieMapping" Type="Self.UserMovieMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieMapping">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieMapping_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserMovieMapping" Type="Self.UserMovieMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieMapping">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MovieTrackerModelStoreContainer">
           <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMovieDetails" EntityType="Self.UserMovieDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMovieMapping" EntityType="Self.UserMovieMapping" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Movie_Genre" Association="Self.FK_Movie_Genre">
             <End Role="Genre" EntitySet="Genre" />
             <End Role="Movie" EntitySet="Movie" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserMovieDetails_Status" Association="Self.FK_UserMovieDetails_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="UserMovieDetails" EntitySet="UserMovieDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieDetails_UserMovieDetails" Association="Self.FK_UserMovieDetails_UserMovieDetails">
+            <End Role="UserMovieMapping" EntitySet="UserMovieMapping" />
+            <End Role="UserMovieDetails" EntitySet="UserMovieDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieMapping_Movie" Association="Self.FK_UserMovieMapping_Movie">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="UserMovieMapping" EntitySet="UserMovieMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieMapping_User" Association="Self.FK_UserMovieMapping_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserMovieMapping" EntitySet="UserMovieMapping" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MovieTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -87,6 +178,7 @@
           <Property Name="ImdbRating" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="GenreId" Type="Byte" />
           <NavigationProperty Name="Genre" Relationship="Self.FK_Movie_Genre" FromRole="Movie" ToRole="Genre" />
+          <NavigationProperty Name="UserMovieMappings" Relationship="MovieTrackerModel.FK_UserMovieMapping_Movie" FromRole="Movie" ToRole="UserMovieMapping" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -96,6 +188,7 @@
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UserFullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserMovieMappings" Relationship="MovieTrackerModel.FK_UserMovieMapping_User" FromRole="User" ToRole="UserMovieMapping" />
         </EntityType>
         <Association Name="FK_Movie_Genre">
           <End Role="Genre" Type="Self.Genre" Multiplicity="0..1" />
@@ -117,7 +210,105 @@
             <End Role="Genre" EntitySet="Genres" />
             <End Role="Movie" EntitySet="Movies" />
           </AssociationSet>
+          <EntitySet Name="Status" EntityType="MovieTrackerModel.Status" />
+          <EntitySet Name="UserMovieDetails" EntityType="MovieTrackerModel.UserMovieDetail" />
+          <EntitySet Name="UserMovieMappings" EntityType="MovieTrackerModel.UserMovieMapping" />
+          <AssociationSet Name="FK_UserMovieMapping_Movie" Association="MovieTrackerModel.FK_UserMovieMapping_Movie">
+            <End Role="Movie" EntitySet="Movies" />
+            <End Role="UserMovieMapping" EntitySet="UserMovieMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieDetails_Status" Association="MovieTrackerModel.FK_UserMovieDetails_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="UserMovieDetail" EntitySet="UserMovieDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieMapping_User" Association="MovieTrackerModel.FK_UserMovieMapping_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserMovieMapping" EntitySet="UserMovieMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserMovieDetails_UserMovieDetails" Association="MovieTrackerModel.FK_UserMovieDetails_UserMovieDetails">
+            <End Role="UserMovieMapping" EntitySet="UserMovieMappings" />
+            <End Role="UserMovieDetail" EntitySet="UserMovieDetails" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserMovieDetails" Relationship="MovieTrackerModel.FK_UserMovieDetails_Status" FromRole="Status" ToRole="UserMovieDetail" />
+        </EntityType>
+        <EntityType Name="UserMovieDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserMovieMappingId" Type="Int32" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="UserRating" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Status" Relationship="MovieTrackerModel.FK_UserMovieDetails_Status" FromRole="UserMovieDetail" ToRole="Status" />
+          <NavigationProperty Name="UserMovieMapping" Relationship="MovieTrackerModel.FK_UserMovieDetails_UserMovieDetails" FromRole="UserMovieDetail" ToRole="UserMovieMapping" />
+        </EntityType>
+        <EntityType Name="UserMovieMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="MovieId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Movie" Relationship="MovieTrackerModel.FK_UserMovieMapping_Movie" FromRole="UserMovieMapping" ToRole="Movie" />
+          <NavigationProperty Name="User" Relationship="MovieTrackerModel.FK_UserMovieMapping_User" FromRole="UserMovieMapping" ToRole="User" />
+          <NavigationProperty Name="UserMovieDetails" Relationship="MovieTrackerModel.FK_UserMovieDetails_UserMovieDetails" FromRole="UserMovieMapping" ToRole="UserMovieDetail" />
+        </EntityType>
+        <Association Name="FK_UserMovieMapping_Movie">
+          <End Type="MovieTrackerModel.Movie" Role="Movie" Multiplicity="1" />
+          <End Type="MovieTrackerModel.UserMovieMapping" Role="UserMovieMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieMapping">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieDetails_Status">
+          <End Type="MovieTrackerModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="MovieTrackerModel.UserMovieDetail" Role="UserMovieDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieDetail">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieMapping_User">
+          <End Type="MovieTrackerModel.User" Role="User" Multiplicity="1" />
+          <End Type="MovieTrackerModel.UserMovieMapping" Role="UserMovieMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieMapping">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserMovieDetails_UserMovieDetails">
+          <End Type="MovieTrackerModel.UserMovieMapping" Role="UserMovieMapping" Multiplicity="1" />
+          <End Type="MovieTrackerModel.UserMovieDetail" Role="UserMovieDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMovieMapping">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserMovieDetail">
+              <PropertyRef Name="UserMovieMappingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -156,6 +347,34 @@
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserFullName" ColumnName="UserFullName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="MovieTrackerModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMovieDetails">
+            <EntityTypeMapping TypeName="MovieTrackerModel.UserMovieDetail">
+              <MappingFragment StoreEntitySet="UserMovieDetails">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="UserRating" ColumnName="UserRating" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="UserMovieMappingId" ColumnName="UserMovieMappingId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMovieMappings">
+            <EntityTypeMapping TypeName="MovieTrackerModel.UserMovieMapping">
+              <MappingFragment StoreEntitySet="UserMovieMapping">
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

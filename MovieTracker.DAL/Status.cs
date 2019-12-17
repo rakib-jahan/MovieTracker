@@ -12,28 +12,18 @@ namespace MovieTracker.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Movie
+    public partial class Status
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Movie()
+        public Status()
         {
-            this.UserMovieMappings = new HashSet<UserMovieMapping>();
+            this.UserMovieDetails = new HashSet<UserMovieDetail>();
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
-        public Nullable<int> Year { get; set; }
-        public string Runtime { get; set; }
-        public string Director { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
-        public string Poster { get; set; }
-        public string Metascore { get; set; }
-        public string ImdbRating { get; set; }
-        public Nullable<byte> GenreId { get; set; }
+        public string Name { get; set; }
     
-        public virtual Genre Genre { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserMovieMapping> UserMovieMappings { get; set; }
+        public virtual ICollection<UserMovieDetail> UserMovieDetails { get; set; }
     }
 }

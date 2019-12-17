@@ -46,7 +46,7 @@ namespace MovieTracker.Controllers
 
             userManager.InsertUser(new DAL.User { 
                 Id = userRegistration.Id, 
-                Password = userRegistration.Password,
+                Password = Base64Encode(userRegistration.Password),
                 UserFullName = userRegistration.UserFullName,
                 UserName = userRegistration.UserName
             });
@@ -73,7 +73,7 @@ namespace MovieTracker.Controllers
             UserManager userManager = new UserManager();
             var user = userManager.GetUsersById(login.UserName);
 
-            if (user != null && login.UserName == user.UserName && login.Password == user.Password)
+            if (user != null && login.UserName == user.UserName && login.Password == Base64Decode(user.Password))
             {
                 ModelState.Clear();
                 return RedirectToAction("Index");
@@ -90,6 +90,18 @@ namespace MovieTracker.Controllers
         {
             Session["IsAuthenticated"] = false;
             return RedirectToAction("Login");
+        }
+
+        private static string Base64Encode(string pass)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(pass);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        private static string Base64Decode(string encodedPass)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(encodedPass);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }
