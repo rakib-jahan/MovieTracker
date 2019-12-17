@@ -6,11 +6,11 @@ using System.Web;
 
 namespace MovieTracker.Models
 {
-    public class Movie
+    public class MovieDetail
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public int Year { get; set; }
+        public int? Year { get; set; }
         public string Runtime { get; set; }
         public int GenreId { get; set; }
         public string Genre { get; set; }
