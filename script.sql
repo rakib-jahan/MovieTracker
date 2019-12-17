@@ -1,12 +1,12 @@
 USE [MovieTracker]
 GO
-/****** Object:  Table [dbo].[Genre]    Script Date: 16-Dec-19 11:58:39 PM ******/
+/****** Object:  Table [dbo].[Genre]    Script Date: 18-Dec-19 1:08:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Genre](
-	[Id] [tinyint] IDENTITY(1,1) NOT NULL,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[GenreName] [nvarchar](20) NULL,
  CONSTRAINT [PK_Genre] PRIMARY KEY CLUSTERED 
 (
@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[Genre](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Movie]    Script Date: 16-Dec-19 11:58:39 PM ******/
+/****** Object:  Table [dbo].[Movie]    Script Date: 18-Dec-19 1:08:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30,14 +30,28 @@ CREATE TABLE [dbo].[Movie](
 	[Poster] [nvarchar](300) NULL,
 	[Metascore] [nvarchar](10) NULL,
 	[ImdbRating] [nvarchar](10) NULL,
-	[GenreId] [tinyint] NULL,
+	[GenreId] [int] NULL,
  CONSTRAINT [PK_Movie] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 16-Dec-19 11:58:39 PM ******/
+/****** Object:  Table [dbo].[Status]    Script Date: 18-Dec-19 1:08:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Status](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](15) NULL,
+ CONSTRAINT [PK_Status] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[User]    Script Date: 18-Dec-19 1:08:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,16 +67,37 @@ CREATE TABLE [dbo].[User](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[Movie]  WITH CHECK ADD  CONSTRAINT [FK_Movie_Genre] FOREIGN KEY([GenreId])
-REFERENCES [dbo].[Genre] ([Id])
+/****** Object:  Table [dbo].[UserMovieDetails]    Script Date: 18-Dec-19 1:08:32 AM ******/
+SET ANSI_NULLS ON
 GO
-ALTER TABLE [dbo].[Movie] CHECK CONSTRAINT [FK_Movie_Genre]
+SET QUOTED_IDENTIFIER ON
 GO
-
-
-
-
-USE [MovieTracker]
+CREATE TABLE [dbo].[UserMovieDetails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserMovieMappingId] [int] NOT NULL,
+	[StatusId] [int] NOT NULL,
+	[UserRating] [decimal](18, 0) NULL,
+	[Comments] [nvarchar](max) NULL,
+ CONSTRAINT [PK_UserMovieDetails] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserMovieMapping]    Script Date: 18-Dec-19 1:08:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserMovieMapping](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[MovieId] [int] NOT NULL,
+ CONSTRAINT [PK_UserMovieMapping] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
 SET IDENTITY_INSERT [dbo].[Genre] ON 
 
@@ -134,3 +169,33 @@ INSERT [dbo].[Movie] ([Id], [Title], [Year], [Runtime], [Director], [Actors], [P
 INSERT [dbo].[Movie] ([Id], [Title], [Year], [Runtime], [Director], [Actors], [Plot], [Poster], [Metascore], [ImdbRating], [GenreId]) VALUES (149, N'Patton', 1970, N'172 min', N'Franklin J. Schaffner', N'George C. Scott, Karl Malden, Stephen Young, Michael Strong', N'The World War II phase of the career of the controversial American general, George S. Patton.', N'https://m.media-amazon.com/images/M/MV5BMmNhZmJhMmYtNjlkMC00MjhjLTk1NzMtMTNlMzYzNjZlMjNiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UX182_CR0,0,182,268_AL_.jpg', N'91', N'7.9', 9)
 INSERT [dbo].[Movie] ([Id], [Title], [Year], [Runtime], [Director], [Actors], [Plot], [Poster], [Metascore], [ImdbRating], [GenreId]) VALUES (150, N'Midnight Cowboy', 1969, N'113 min', N'John Schlesinger', N'Dustin Hoffman, Jon Voight, Sylvia Miles, John McGiver', N'A naive hustler travels from Texas to New York City to seek personal fortune, finding a new friend in the process.', N'https://m.media-amazon.com/images/M/MV5BNTgwZmIzMmYtZjE3Yy00NzgzLTgxNmUtNjlmZDlkMzlhOTJkXkEyXkFqcGdeQXVyNjUwNzk3NDc@._V1_UX182_CR0,0,182,268_AL_.jpg', N'79', N'7.8', 12)
 SET IDENTITY_INSERT [dbo].[Movie] OFF
+SET IDENTITY_INSERT [dbo].[Status] ON 
+
+INSERT [dbo].[Status] ([Id], [Name]) VALUES (1, N'Interested')
+INSERT [dbo].[Status] ([Id], [Name]) VALUES (2, N'Watched')
+SET IDENTITY_INSERT [dbo].[Status] OFF
+ALTER TABLE [dbo].[Movie]  WITH CHECK ADD  CONSTRAINT [FK_Movie_Genre] FOREIGN KEY([GenreId])
+REFERENCES [dbo].[Genre] ([Id])
+GO
+ALTER TABLE [dbo].[Movie] CHECK CONSTRAINT [FK_Movie_Genre]
+GO
+ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_Status] FOREIGN KEY([StatusId])
+REFERENCES [dbo].[Status] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_Status]
+GO
+ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_UserMovieDetails] FOREIGN KEY([UserMovieMappingId])
+REFERENCES [dbo].[UserMovieMapping] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_UserMovieDetails]
+GO
+ALTER TABLE [dbo].[UserMovieMapping]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieMapping_Movie] FOREIGN KEY([MovieId])
+REFERENCES [dbo].[Movie] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieMapping] CHECK CONSTRAINT [FK_UserMovieMapping_Movie]
+GO
+ALTER TABLE [dbo].[UserMovieMapping]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieMapping_User] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieMapping] CHECK CONSTRAINT [FK_UserMovieMapping_User]
+GO
