@@ -35,6 +35,11 @@ namespace MovieTracker.DAL
             return movieTrackerEntities.SaveChanges() > 0;
         }
 
+        public User GetUsersById(string userId)
+        {
+            return movieTrackerEntities.Users.Where(x=>x.UserName == userId).FirstOrDefault();
+        }
+
         public List<User> GetUsers()
         {
             return movieTrackerEntities.Users.ToList();

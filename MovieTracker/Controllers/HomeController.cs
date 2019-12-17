@@ -68,15 +68,21 @@ namespace MovieTracker.Controllers
         [HttpPost]
         public ActionResult Login(Login login)
         {
-            ViewBag.Message = "Your contact page.";            
+            ViewBag.Message = "Your contact page.";
 
-            if (login.UserName == "rakib.cse.sust@gmail.com" && login.Password == "1")
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUsersById(login.UserName);
+
+            if (user != null && login.UserName == user.UserName && login.Password == user.Password)
             {
-                ModelState.Clear();                
+                ModelState.Clear();
                 return RedirectToAction("Index");
             }
-
-            return View();
+            else
+            {
+                ViewBag.ErrorMessage = user != null ? "User name | Password mismatched" : "Not found";
+                return View();
+            }
         }
 
         [HttpGet]
