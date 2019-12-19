@@ -15,8 +15,8 @@
             }
         );
 
-        function GetMovieList() {
-            var request = $http.get('/Controllers/GetMovieList');
+        function GetMovieList(userId) {
+            var request = $http.get('/Controllers/GetMovieList?userId=' + userId);
             return request.then(HandleSuccess, HandleError);
         }
 

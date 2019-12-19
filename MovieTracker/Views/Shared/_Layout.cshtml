@@ -21,13 +21,13 @@
             @if (Session["IsAuthenticated"] != null && Session["IsAuthenticated"].ToString() == "True")
             {
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
+                    @*<ul class="nav navbar-nav">
 
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li>@Html.ActionLink("About", "About", "Home")</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 
-                    </ul>
+                    </ul>*@
                     <ul class="nav navbar-nav" style="float:right;">
 
                         <li class="dropdown">

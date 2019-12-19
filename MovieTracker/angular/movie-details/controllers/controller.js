@@ -15,16 +15,13 @@
         init();
 
         function init() {
-
-            service.GetMovieList().then(function(data) {
+            service.GetMovieList(parseInt(userId)).then(function (data) {
                 vm.movieList = data;
                 $scope.totalItems = vm.movieList.length;
                 $scope.currentPage = 1;
                 $scope.itemsPerPage = 6;
                 $scope.maxSize = 5;
-            });            
-
-            
+            });
         }
 
         $scope.setPage = function (pageNo) {

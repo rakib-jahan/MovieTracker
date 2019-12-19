@@ -13,17 +13,21 @@ namespace MovieTracker.Controllers
     {
         [HttpGet]
         [Route("Controllers/GetMovieList")]
-        public List<MovieDetail> Get()
+        public List<MovieDetail> Get(int userId)
         {
             MovieManager movieManager = new MovieManager();
+            UserMovieMappingManager userMovieMappingManager = new UserMovieMappingManager();
             List<MovieDetail> movieList = new List<MovieDetail>();
+
+            var userMovieMappingList = userMovieMappingManager.GetUserMovieMappingByUserId(userId);
 
             foreach (var item in movieManager.GetMovies())
             {
-                movieList.Add(new MovieDetail { 
-                    Id = item.Id, 
-                    Actors = item.Actors, 
-                    Director = item.Director, 
+                movieList.Add(new MovieDetail
+                {
+                    Id = item.Id,
+                    Actors = item.Actors,
+                    Director = item.Director,
                     Genre = item.Genre.GenreName,
                     GenreId = item.Genre.Id,
                     ImdbRating = item.ImdbRating,
@@ -40,11 +44,11 @@ namespace MovieTracker.Controllers
             return movieList;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// GET api/<controller>/5
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         // POST api/<controller>
         public void Post([FromBody]string value)

@@ -13,7 +13,10 @@ namespace MovieTracker.Controllers
         public ActionResult Index()
         {
             Session["IsAuthenticated"] = true;
-            ViewBag.UserFullName = "Rakib Jahan Khan";
+            var user = TempData["User"] as User;
+            ViewBag.UserId = user.Id;
+            ViewBag.UserName = user.UserName;
+            ViewBag.UserFullName = user.UserFullName;
             return View();
         }
 
@@ -75,6 +78,8 @@ namespace MovieTracker.Controllers
 
             if (user != null && login.UserName == user.UserName && login.Password == Base64Decode(user.Password))
             {
+                TempData["User"] = user;
+
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }

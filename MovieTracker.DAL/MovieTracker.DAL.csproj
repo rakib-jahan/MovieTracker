@@ -86,6 +86,7 @@
     <Compile Include="UserMovieMapping.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserMovieMappingManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model.edmx">
