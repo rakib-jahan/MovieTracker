@@ -17,7 +17,7 @@ namespace MovieTracker.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Movie()
         {
-            this.UserMovieMappings = new HashSet<UserMovieMapping>();
+            this.UserMovieDetails = new HashSet<UserMovieDetail>();
         }
     
         public int Id { get; set; }
@@ -30,10 +30,10 @@ namespace MovieTracker.DAL
         public string Poster { get; set; }
         public string Metascore { get; set; }
         public string ImdbRating { get; set; }
-        public Nullable<byte> GenreId { get; set; }
+        public Nullable<int> GenreId { get; set; }
     
         public virtual Genre Genre { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserMovieMapping> UserMovieMappings { get; set; }
+        public virtual ICollection<UserMovieDetail> UserMovieDetails { get; set; }
     }
 }

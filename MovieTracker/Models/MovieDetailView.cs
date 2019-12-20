@@ -6,7 +6,7 @@ using System.Web;
 
 namespace MovieTracker.Models
 {
-    public class MovieDetail
+    public class MovieDetailView
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -21,5 +21,6 @@ namespace MovieTracker.Models
         public string Metascore { get; set; }
         public string ImdbRating { get; set; }
         public bool IsAddedToWatchList { get; set; }
+        public int UserMovieDetailId { get; set; }
     }
 }

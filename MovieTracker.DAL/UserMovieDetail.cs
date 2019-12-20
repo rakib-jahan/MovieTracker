@@ -15,12 +15,14 @@ namespace MovieTracker.DAL
     public partial class UserMovieDetail
     {
         public int Id { get; set; }
-        public int UserMovieMappingId { get; set; }
+        public int UserId { get; set; }
+        public int MovieId { get; set; }
         public int StatusId { get; set; }
         public Nullable<decimal> UserRating { get; set; }
         public string Comments { get; set; }
     
+        public virtual Movie Movie { get; set; }
         public virtual Status Status { get; set; }
-        public virtual UserMovieMapping UserMovieMapping { get; set; }
+        public virtual User User { get; set; }
     }
 }

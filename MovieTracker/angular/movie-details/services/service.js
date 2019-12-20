@@ -11,12 +11,18 @@
 
         return (
             {
-                GetMovieList: GetMovieList
+                GetMovieList: GetMovieList,
+                AddRemoveMovieToUser: AddRemoveMovieToUser
             }
         );
 
         function GetMovieList(userId) {
             var request = $http.get('/Controllers/GetMovieList?userId=' + userId);
+            return request.then(HandleSuccess, HandleError);
+        }
+
+        function AddRemoveMovieToUser(data) {
+            var request = $http.post('/Controllers/AddRemoveMovieToUser', data);
             return request.then(HandleSuccess, HandleError);
         }
 

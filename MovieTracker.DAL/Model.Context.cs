@@ -27,9 +27,8 @@ namespace MovieTracker.DAL
     
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Status> Status { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserMovieDetail> UserMovieDetails { get; set; }
-        public virtual DbSet<UserMovieMapping> UserMovieMappings { get; set; }
     }
 }

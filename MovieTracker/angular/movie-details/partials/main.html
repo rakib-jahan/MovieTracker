@@ -27,8 +27,8 @@
                 </div>
                 <div class="col-md-7" style="padding-left:0px;padding-right: 0px;">
                     <i ng-class="{'fa-check-circle added-color': row.IsAddedToWatchList, 'fa-plus-circle add-color': !row.IsAddedToWatchList}"
-                       class="fas fa-2x"
-                       style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="updateStatus(row)"></i>
+                       class="fa fa-2x"
+                       style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="AddRemoveMovieToUser(row)"></i>
                     <div class="lib-row lib-header" title=" {{row.Title}}">
                         {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
                     </div>
@@ -38,7 +38,7 @@
                         <span class="">{{row.Genre}}</span>
                     </p>
                     <p class="lib-row" style="font-size:12px;font-weight:bold;">
-                        <span class="" style="color:gray;"><i class="fas fa-star" style="color:gold;margin-right:2px;"></i>{{row.ImdbRating}}</span>&nbsp;
+                        <span class="" style="color:gray;"><i class="fa fa-star" style="color:gold;margin-right:2px;"></i>{{row.ImdbRating}}</span>&nbsp;
                         <span class="label label-success ng-binding" style="padding: 3px;margin-right: 3px;">{{row.Metascore}}</span>Metascore
                     </p>
                     <p class="lib-row" style="color: #9e9e9e;font-size: 12px;">
