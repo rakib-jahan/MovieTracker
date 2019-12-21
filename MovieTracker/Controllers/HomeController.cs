@@ -14,9 +14,12 @@ namespace MovieTracker.Controllers
         {
             Session["IsAuthenticated"] = true;
             var user = Session["User"] as User;
-            ViewBag.UserId = user.Id;
-            ViewBag.UserName = user.UserName;
-            ViewBag.UserFullName = user.UserFullName;
+            if (user != null)
+            {
+                ViewBag.UserId = user.Id;
+                ViewBag.UserName = user.UserName;
+                ViewBag.UserFullName = user.UserFullName;
+            }            
             return View();
         }
 
@@ -24,9 +27,12 @@ namespace MovieTracker.Controllers
         {
             Session["IsAuthenticated"] = true;
             var user = Session["User"] as User;
-            ViewBag.UserId = user.Id;
-            ViewBag.UserName = user.UserName;
-            ViewBag.UserFullName = user.UserFullName;
+            if (user != null)
+            {
+                ViewBag.UserId = user.Id;
+                ViewBag.UserName = user.UserName;
+                ViewBag.UserFullName = user.UserFullName;
+            }
             return View();
         }
 
