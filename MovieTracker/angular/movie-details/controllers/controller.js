@@ -48,7 +48,8 @@
             var data = {
                 Id: obj.UserMovieDetailId,
                 UserId: userId,
-                MovieId: obj.Id
+                MovieId: obj.Id,
+                MovieName: obj.Title
             };
             service.AddRemoveMovieToUser(data).then(function (a) {
                 if (obj.IsAddedToWatchList) {

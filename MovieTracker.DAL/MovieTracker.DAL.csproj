@@ -79,6 +79,10 @@
     <Compile Include="User.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserActivity.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserActivityManage.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="UserMovieDetail.cs">
       <DependentUpon>Model.tt</DependentUpon>

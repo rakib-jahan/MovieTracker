@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MovieTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MovieTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Genre">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,6 +44,15 @@
           <Property Name="UserFullName" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ActivityDetails" Type="nvarchar(max)" />
+          <Property Name="ActivityDateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="UserMovieDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -64,6 +73,18 @@
             </Principal>
             <Dependent Role="Movie">
               <PropertyRef Name="GenreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserActivity_UserActivity">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserActivity" Type="Self.UserActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserActivity">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -108,10 +129,15 @@
           <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserActivity" EntityType="Self.UserActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMovieDetails" EntityType="Self.UserMovieDetails" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Movie_Genre" Association="Self.FK_Movie_Genre">
             <End Role="Genre" EntitySet="Genre" />
             <End Role="Movie" EntitySet="Movie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserActivity_UserActivity" Association="Self.FK_UserActivity_UserActivity">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserActivity" EntitySet="UserActivity" />
           </AssociationSet>
           <AssociationSet Name="FK_UserMovieDetails_Movie" Association="Self.FK_UserMovieDetails_Movie">
             <End Role="Movie" EntitySet="Movie" />
@@ -126,8 +152,7 @@
             <End Role="UserMovieDetails" EntitySet="UserMovieDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MovieTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -174,6 +199,7 @@
           <Property Name="UserFullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserMovieDetails" Relationship="Self.FK_UserMovieDetails_User" FromRole="User" ToRole="UserMovieDetails" />
+          <NavigationProperty Name="UserActivities" Relationship="MovieTrackerModel.FK_UserActivity_UserActivity" FromRole="User" ToRole="UserActivity" />
         </EntityType>
         <EntityType Name="UserMovieDetail">
           <Key>
@@ -259,7 +285,34 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserMovieDetails" EntitySet="UserMovieDetails" />
           </AssociationSet>
+          <EntitySet Name="UserActivities" EntityType="MovieTrackerModel.UserActivity" />
+          <AssociationSet Name="FK_UserActivity_UserActivity" Association="MovieTrackerModel.FK_UserActivity_UserActivity">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserActivity" EntitySet="UserActivities" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ActivityDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="MovieTrackerModel.FK_UserActivity_UserActivity" FromRole="UserActivity" ToRole="User" />
+          <Property Name="ActivityDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_UserActivity_UserActivity">
+          <End Type="MovieTrackerModel.User" Role="User" Multiplicity="1" />
+          <End Type="MovieTrackerModel.UserActivity" Role="UserActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserActivity">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -318,6 +371,16 @@
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="UserRating" ColumnName="UserRating" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActivities">
+            <EntityTypeMapping TypeName="MovieTrackerModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivity">
+                <ScalarProperty Name="ActivityDateTime" ColumnName="ActivityDateTime" />
+                <ScalarProperty Name="ActivityDetails" ColumnName="ActivityDetails" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

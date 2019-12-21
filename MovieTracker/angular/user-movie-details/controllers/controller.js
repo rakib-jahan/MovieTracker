@@ -33,7 +33,8 @@
                 Id: obj.UserMovieDetailId,
                 UserId: userId,
                 MovieId: obj.Id,
-                StatusId: obj.UserMovieDetailStatusId === 1 ? 2 : 1
+                StatusId: obj.UserMovieDetailStatusId === 1 ? 2 : 1,
+                MovieName: obj.Title
             };
             service.UpdateUserMovieDetails(data).then(function (a) {
                 obj.UserMovieDetailStatusId = obj.UserMovieDetailStatusId === 1 ? 2 : 1;

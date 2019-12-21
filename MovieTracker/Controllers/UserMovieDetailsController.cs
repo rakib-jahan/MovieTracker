@@ -1,10 +1,7 @@
 ﻿using MovieTracker.DAL;
 using MovieTracker.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace MovieTracker.Controllers
@@ -50,20 +47,27 @@ namespace MovieTracker.Controllers
         [Route("Controllers/UserMovieDetails/UpdateUserMovieDetails")]
         public void Post(UserMovieDetailView data)
         {
+            UserActivityManage userActivityManager = new UserActivityManage();
             UserMovieDetailManager userMovieDetailManager = new UserMovieDetailManager();
+
             UserMovieDetail userMovieDetail = new UserMovieDetail { Id = data.Id, UserId = data.UserId, MovieId = data.MovieId, StatusId = data.StatusId };
 
+            UserActivity userActivity = new UserActivity
+            {
+                Id = 0,
+                UserId =
+                    data.UserId,
+                ActivityDetails = "",
+                ActivityDateTime = DateTime.Now
+            };
+
+            if(data.StatusId == 2)
+                userActivity.ActivityDetails = string.Format("Movie : {0} - status watched", data.MovieName);
+            else
+                userActivity.ActivityDetails = string.Format("Movie : {0} - status watched to interested", data.MovieName);
+
             userMovieDetailManager.UpdateUserMovieDetail(userMovieDetail);
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            userActivityManager.InsertUser(userActivity);
         }
     }
 }

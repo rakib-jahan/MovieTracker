@@ -18,6 +18,7 @@ namespace MovieTracker.DAL
         public User()
         {
             this.UserMovieDetails = new HashSet<UserMovieDetail>();
+            this.UserActivities = new HashSet<UserActivity>();
         }
     
         public int Id { get; set; }
@@ -27,5 +28,7 @@ namespace MovieTracker.DAL
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserMovieDetail> UserMovieDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserActivity> UserActivities { get; set; }
     }
 }

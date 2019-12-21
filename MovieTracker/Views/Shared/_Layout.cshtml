@@ -22,24 +22,16 @@
             @if (Session["IsAuthenticated"] != null && Session["IsAuthenticated"].ToString() == "True")
             {
                 <div class="navbar-collapse collapse">
-                    @*<ul class="nav navbar-nav">
-
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-
-                    </ul>*@
                     <ul class="nav navbar-nav" style="float:right;">
-
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">@ViewBag.UserFullName <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("User Movie Details", "UserMovieDetails", "Home")</li>
+                                <li>@Html.ActionLink("User Activity", "UserMovieActivity", "Home")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Sign out", "Logout", "Home")</li>
                             </ul>
                         </li>
-
                     </ul>
                 </div>
             }

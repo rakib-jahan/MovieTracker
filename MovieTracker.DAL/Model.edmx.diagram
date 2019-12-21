@@ -14,6 +14,8 @@
         <AssociationConnector Association="MovieTrackerModel.FK_UserMovieDetails_Movie" ManuallyRouted="false" />
         <AssociationConnector Association="MovieTrackerModel.FK_UserMovieDetails_Status" ManuallyRouted="false" />
         <AssociationConnector Association="MovieTrackerModel.FK_UserMovieDetails_User" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MovieTrackerModel.UserActivity" Width="1.5" PointX="5.25" PointY="8.75" />
+        <AssociationConnector Association="MovieTrackerModel.FK_UserActivity_UserActivity" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

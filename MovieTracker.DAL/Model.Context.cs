@@ -30,5 +30,6 @@ namespace MovieTracker.DAL
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserMovieDetail> UserMovieDetails { get; set; }
+        public virtual DbSet<UserActivity> UserActivities { get; set; }
     }
 }

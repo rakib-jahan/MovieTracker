@@ -3,8 +3,6 @@ using MovieTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace MovieTracker.Controllers
@@ -47,35 +45,43 @@ namespace MovieTracker.Controllers
             return movieList;
         }
 
-        //// GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
         [HttpPost]
         [Route("Controllers/MovieDetails/AddRemoveMovieToUser")]
         public int Post(UserMovieDetailView data)
         {
+            UserActivityManage userActivityManager = new UserActivityManage();
             UserMovieDetailManager userMovieDetailManager = new UserMovieDetailManager();
-            UserMovieDetail userMovieDetail = new UserMovieDetail { Id = data.Id, UserId = data.UserId, MovieId = data.MovieId, StatusId = 1 };
+
+            UserMovieDetail userMovieDetail = new UserMovieDetail
+            {
+                Id = data.Id,
+                UserId = data.UserId,
+                MovieId = data.MovieId,
+                StatusId = 1
+            };
+            UserActivity userActivity = new UserActivity
+            {
+                Id = 0,
+                UserId =
+                    data.UserId,
+                ActivityDetails = "",
+                ActivityDateTime = DateTime.Now
+            };
 
             if (data.Id > 0)
+            {
                 userMovieDetailManager.DeleteUserMovieDetail(userMovieDetail);
+                userActivity.ActivityDetails = string.Format("Movie : {0} - removed from watched list", data.MovieName);
+                userActivityManager.InsertUser(userActivity);
+            }
             else
+            {
                 userMovieDetailManager.InsertUserMovieDetail(userMovieDetail);
+                userActivity.ActivityDetails = string.Format("Movie : {0} - added to watched list", data.MovieName);
+                userActivityManager.InsertUser(userActivity);
+            }                
 
             return userMovieDetail.Id;
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

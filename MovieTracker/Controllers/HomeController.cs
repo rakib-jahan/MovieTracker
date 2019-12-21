@@ -36,6 +36,19 @@ namespace MovieTracker.Controllers
             return View();
         }
 
+        public ActionResult UserMovieActivity()
+        {
+            Session["IsAuthenticated"] = true;
+            var user = Session["User"] as User;
+            if (user != null)
+            {
+                ViewBag.UserId = user.Id;
+                ViewBag.UserName = user.UserName;
+                ViewBag.UserFullName = user.UserFullName;
+            }
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
