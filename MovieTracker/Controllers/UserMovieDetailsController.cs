@@ -1,140 +1,69 @@
-﻿using System;
+﻿using MovieTracker.DAL;
+using MovieTracker.Models;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using MovieTracker.DAL;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace MovieTracker.Controllers
 {
-    public class UserMovieDetailsController : Controller
+    public class UserMovieDetailsController : ApiController
     {
-        private MovieTrackerEntities db = new MovieTrackerEntities();
-
-        // GET: UserMovieDetails
-        public ActionResult Index()
+        [HttpGet]
+        [Route("Controllers/UserMovieDetails/GetMovieList")]
+        public dynamic Get(int userId)
         {
-            var userMovieDetails = db.UserMovieDetails.Include(u => u.Movie).Include(u => u.Status).Include(u => u.User);
-            return View(userMovieDetails.ToList());
-        }
-
-        // GET: UserMovieDetails/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            using (MovieTrackerEntities context = new MovieTrackerEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var result = (
+                    from um in context.UserMovieDetails
+                    join m in context.Movies on um.MovieId equals m.Id
+                    where um.UserId == userId
+                    select new
+                    {
+                        Id = m.Id,
+                        Actors = m.Actors,
+                        Director = m.Director,
+                        Genre = m.Genre.GenreName,
+                        GenreId = m.Genre.Id,
+                        ImdbRating = m.ImdbRating,
+                        Metascore = m.Metascore,
+                        Plot = m.Plot,
+                        Poster = m.Poster,
+                        Runtime = m.Runtime,
+                        Title = m.Title,
+                        Year = m.Year,
+                        UserMovieDetailId = um.Id,
+                        UserMovieDetailStatusId = um.StatusId,
+                        UserMovieDetailUserRating = um.UserRating,
+                        UserMovieDetailComments = um.Comments
+                    }
+                    ).ToList();
+
+                return result;
             }
-            UserMovieDetail userMovieDetail = db.UserMovieDetails.Find(id);
-            if (userMovieDetail == null)
-            {
-                return HttpNotFound();
-            }
-            return View(userMovieDetail);
         }
 
-        // GET: UserMovieDetails/Create
-        public ActionResult Create()
-        {
-            ViewBag.MovieId = new SelectList(db.Movies, "Id", "Title");
-            ViewBag.StatusId = new SelectList(db.Status, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName");
-            return View();
-        }
-
-        // POST: UserMovieDetails/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,MovieId,StatusId,UserRating,Comments")] UserMovieDetail userMovieDetail)
+        [Route("Controllers/UserMovieDetails/UpdateUserMovieDetails")]
+        public void Post(UserMovieDetailView data)
         {
-            if (ModelState.IsValid)
-            {
-                db.UserMovieDetails.Add(userMovieDetail);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            UserMovieDetailManager userMovieDetailManager = new UserMovieDetailManager();
+            UserMovieDetail userMovieDetail = new UserMovieDetail { Id = data.Id, UserId = data.UserId, MovieId = data.MovieId, StatusId = data.StatusId };
 
-            ViewBag.MovieId = new SelectList(db.Movies, "Id", "Title", userMovieDetail.MovieId);
-            ViewBag.StatusId = new SelectList(db.Status, "Id", "Name", userMovieDetail.StatusId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", userMovieDetail.UserId);
-            return View(userMovieDetail);
+            userMovieDetailManager.UpdateUserMovieDetail(userMovieDetail);
         }
 
-        // GET: UserMovieDetails/Edit/5
-        public ActionResult Edit(int? id)
+        // PUT api/<controller>/5
+        public void Put(int id, [FromBody]string value)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UserMovieDetail userMovieDetail = db.UserMovieDetails.Find(id);
-            if (userMovieDetail == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.MovieId = new SelectList(db.Movies, "Id", "Title", userMovieDetail.MovieId);
-            ViewBag.StatusId = new SelectList(db.Status, "Id", "Name", userMovieDetail.StatusId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", userMovieDetail.UserId);
-            return View(userMovieDetail);
         }
 
-        // POST: UserMovieDetails/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,MovieId,StatusId,UserRating,Comments")] UserMovieDetail userMovieDetail)
+        // DELETE api/<controller>/5
+        public void Delete(int id)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(userMovieDetail).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.MovieId = new SelectList(db.Movies, "Id", "Title", userMovieDetail.MovieId);
-            ViewBag.StatusId = new SelectList(db.Status, "Id", "Name", userMovieDetail.StatusId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", userMovieDetail.UserId);
-            return View(userMovieDetail);
-        }
-
-        // GET: UserMovieDetails/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UserMovieDetail userMovieDetail = db.UserMovieDetails.Find(id);
-            if (userMovieDetail == null)
-            {
-                return HttpNotFound();
-            }
-            return View(userMovieDetail);
-        }
-
-        // POST: UserMovieDetails/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            UserMovieDetail userMovieDetail = db.UserMovieDetails.Find(id);
-            db.UserMovieDetails.Remove(userMovieDetail);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

@@ -9,10 +9,10 @@ using System.Web.Http;
 
 namespace MovieTracker.Controllers
 {
-    public class MovieTrackerController : ApiController
+    public class MovieDetailsController : ApiController
     {
         [HttpGet]
-        [Route("Controllers/GetMovieList")]
+        [Route("Controllers/MovieDetails/GetMovieList")]
         public List<MovieDetailView> Get(int userId)
         {
             MovieManager movieManager = new MovieManager();
@@ -54,7 +54,7 @@ namespace MovieTracker.Controllers
         //}
 
         [HttpPost]
-        [Route("Controllers/AddRemoveMovieToUser")]
+        [Route("Controllers/MovieDetails/AddRemoveMovieToUser")]
         public int Post(UserMovieDetailView data)
         {
             UserMovieDetailManager userMovieDetailManager = new UserMovieDetailManager();

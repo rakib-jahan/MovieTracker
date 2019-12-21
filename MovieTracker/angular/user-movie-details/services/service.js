@@ -12,17 +12,17 @@
         return (
             {
                 GetMovieList: GetMovieList,
-                AddRemoveMovieToUser: AddRemoveMovieToUser
+                UpdateUserMovieDetails: UpdateUserMovieDetails
             }
         );
 
         function GetMovieList(userId) {
-            var request = $http.get('/Controllers/MovieDetails/GetMovieList?userId=' + userId);
+            var request = $http.get('/Controllers/UserMovieDetails/GetMovieList?userId=' + userId);
             return request.then(HandleSuccess, HandleError);
         }
 
-        function AddRemoveMovieToUser(data) {
-            var request = $http.post('/Controllers/MovieDetails/AddRemoveMovieToUser', data);
+        function UpdateUserMovieDetails(data) {
+            var request = $http.post('/Controllers/UserMovieDetails/UpdateUserMovieDetails', data);
             return request.then(HandleSuccess, HandleError);
         }
 

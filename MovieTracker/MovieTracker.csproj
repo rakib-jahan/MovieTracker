@@ -140,7 +140,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MovieTrackerController.cs" />
+    <Compile Include="Controllers\MovieDetailsController.cs" />
     <Compile Include="Controllers\UserMovieDetailsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,6 +152,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="angular\user-movie-details\app.js" />
+    <Content Include="angular\user-movie-details\controllers\controller.js" />
+    <Content Include="angular\user-movie-details\partials\main.html" />
+    <Content Include="angular\user-movie-details\services\service.js" />
+    <Content Include="angular\movie-details\controllers\controller.js" />
     <Content Include="angular\movie-details\services\service.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -208,7 +213,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="angular\movie-details\app.js" />
-    <Content Include="angular\movie-details\controllers\controller.js" />
     <Content Include="angular\movie-details\partials\main.html" />
     <Content Include="Scripts\ui-bootstrap-tpls-2.5.0.min.js" />
     <Content Include="Web.config" />
@@ -247,6 +251,7 @@
     <Content Include="webfonts\fa-brands-400.woff" />
     <Content Include="webfonts\fa-brands-400.ttf" />
     <Content Include="webfonts\fa-brands-400.eot" />
+    <Content Include="Views\Home\UserMovieDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

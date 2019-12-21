@@ -22,23 +22,19 @@
     <div class="form-group">
         <input class="form-control input-sm" type="text" ng-model="movieSearch.name" placeholder="Search by anything ...">
     </div>
-    <div class="form-group">
-        <label for="exampleInputName2">Genre : </label>
-        <select class="form-control input-sm" ng-options="genre as genre for genre in genres" ng-model="movieSearch.genre" ng-change="filter()"></select>
-    </div>
 </div>
 
 <div class="row row-margin-bottom row-margin-top">
-    <div class="col-md-4 no-padding lib-item" data-category="view" ng-repeat="row in tempMovieList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter: movieSearch.name">
+    <div class="col-md-4 no-padding lib-item" data-category="view" ng-repeat="row in umdc.movieList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter: movieSearch.name">
         <div class="lib-panel">
             <div class="row box-shadow no_margin">
                 <div class="col-md-5 no_padding">
                     <img class="lib-img-show" src="{{row.Poster}}">
                 </div>
                 <div class="col-md-7" style="padding-left:0px;padding-right: 0px;">
-                    <i ng-class="{'fa-check-circle added-color': row.IsAddedToWatchList, 'fa-plus-circle add-color': !row.IsAddedToWatchList}"
+                    <i ng-class="{'fa-check-circle added-color': row.UserMovieDetailStatusId == 2, 'fa-plus-circle add-color': row.UserMovieDetailStatusId == 1}"
                        class="fa fa-2x"
-                       style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="AddRemoveMovieToUser(row)"></i>
+                       style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="UpdateUserMovieDetails(row)"></i>
                     <div class="lib-row lib-header" title=" {{row.Title}}">
                         {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
                     </div>
