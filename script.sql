@@ -1,6 +1,6 @@
 USE [MovieTracker]
 GO
-/****** Object:  Table [dbo].[Genre]    Script Date: 18-Dec-19 1:08:32 AM ******/
+/****** Object:  Table [dbo].[Genre]    Script Date: 22-Dec-19 1:59:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[Genre](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Movie]    Script Date: 18-Dec-19 1:08:32 AM ******/
+/****** Object:  Table [dbo].[Movie]    Script Date: 22-Dec-19 1:59:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -37,7 +37,7 @@ CREATE TABLE [dbo].[Movie](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Status]    Script Date: 18-Dec-19 1:08:32 AM ******/
+/****** Object:  Table [dbo].[Status]    Script Date: 22-Dec-19 1:59:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -51,7 +51,7 @@ CREATE TABLE [dbo].[Status](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 18-Dec-19 1:08:32 AM ******/
+/****** Object:  Table [dbo].[User]    Script Date: 22-Dec-19 1:59:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -67,14 +67,31 @@ CREATE TABLE [dbo].[User](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserMovieDetails]    Script Date: 18-Dec-19 1:08:32 AM ******/
+/****** Object:  Table [dbo].[UserActivity]    Script Date: 22-Dec-19 1:59:26 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserActivity](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[ActivityDetails] [nvarchar](max) NULL,
+	[ActivityDateTime] [datetime] NULL,
+ CONSTRAINT [PK_UserActivity] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserMovieDetails]    Script Date: 22-Dec-19 1:59:26 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[UserMovieDetails](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[UserMovieMappingId] [int] NOT NULL,
+	[UserId] [int] NOT NULL,
+	[MovieId] [int] NOT NULL,
 	[StatusId] [int] NOT NULL,
 	[UserRating] [decimal](18, 0) NULL,
 	[Comments] [nvarchar](max) NULL,
@@ -84,20 +101,35 @@ CREATE TABLE [dbo].[UserMovieDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserMovieMapping]    Script Date: 18-Dec-19 1:08:32 AM ******/
-SET ANSI_NULLS ON
+ALTER TABLE [dbo].[Movie]  WITH CHECK ADD  CONSTRAINT [FK_Movie_Genre] FOREIGN KEY([GenreId])
+REFERENCES [dbo].[Genre] ([Id])
 GO
-SET QUOTED_IDENTIFIER ON
+ALTER TABLE [dbo].[Movie] CHECK CONSTRAINT [FK_Movie_Genre]
 GO
-CREATE TABLE [dbo].[UserMovieMapping](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[UserId] [int] NOT NULL,
-	[MovieId] [int] NOT NULL,
- CONSTRAINT [PK_UserMovieMapping] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+ALTER TABLE [dbo].[UserActivity]  WITH CHECK ADD  CONSTRAINT [FK_UserActivity_UserActivity] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[UserActivity] CHECK CONSTRAINT [FK_UserActivity_UserActivity]
+GO
+ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_Movie] FOREIGN KEY([MovieId])
+REFERENCES [dbo].[Movie] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_Movie]
+GO
+ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_Status] FOREIGN KEY([StatusId])
+REFERENCES [dbo].[Status] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_Status]
+GO
+ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_User] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_User]
+GO
+
+
+
+USE [MovieTracker]
 GO
 SET IDENTITY_INSERT [dbo].[Genre] ON 
 
@@ -174,28 +206,3 @@ SET IDENTITY_INSERT [dbo].[Status] ON
 INSERT [dbo].[Status] ([Id], [Name]) VALUES (1, N'Interested')
 INSERT [dbo].[Status] ([Id], [Name]) VALUES (2, N'Watched')
 SET IDENTITY_INSERT [dbo].[Status] OFF
-ALTER TABLE [dbo].[Movie]  WITH CHECK ADD  CONSTRAINT [FK_Movie_Genre] FOREIGN KEY([GenreId])
-REFERENCES [dbo].[Genre] ([Id])
-GO
-ALTER TABLE [dbo].[Movie] CHECK CONSTRAINT [FK_Movie_Genre]
-GO
-ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_Status] FOREIGN KEY([StatusId])
-REFERENCES [dbo].[Status] ([Id])
-GO
-ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_Status]
-GO
-ALTER TABLE [dbo].[UserMovieDetails]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieDetails_UserMovieDetails] FOREIGN KEY([UserMovieMappingId])
-REFERENCES [dbo].[UserMovieMapping] ([Id])
-GO
-ALTER TABLE [dbo].[UserMovieDetails] CHECK CONSTRAINT [FK_UserMovieDetails_UserMovieDetails]
-GO
-ALTER TABLE [dbo].[UserMovieMapping]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieMapping_Movie] FOREIGN KEY([MovieId])
-REFERENCES [dbo].[Movie] ([Id])
-GO
-ALTER TABLE [dbo].[UserMovieMapping] CHECK CONSTRAINT [FK_UserMovieMapping_Movie]
-GO
-ALTER TABLE [dbo].[UserMovieMapping]  WITH CHECK ADD  CONSTRAINT [FK_UserMovieMapping_User] FOREIGN KEY([UserId])
-REFERENCES [dbo].[User] ([Id])
-GO
-ALTER TABLE [dbo].[UserMovieMapping] CHECK CONSTRAINT [FK_UserMovieMapping_User]
-GO
