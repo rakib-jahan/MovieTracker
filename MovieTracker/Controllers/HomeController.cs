@@ -1,4 +1,5 @@
-﻿using MovieTracker.DAL;
+﻿using MovieTracker.App_Start;
+using MovieTracker.DAL;
 using MovieTracker.Models;
 using System;
 using System.Collections.Generic;
@@ -10,56 +11,21 @@ namespace MovieTracker.Controllers
 {
     public class HomeController : Controller
     {
+        [SessionTimeout]
         public ActionResult Index()
         {
-            Session["IsAuthenticated"] = true;
-            var user = Session["User"] as User;
-            if (user != null)
-            {
-                ViewBag.UserId = user.Id;
-                ViewBag.UserName = user.UserName;
-                ViewBag.UserFullName = user.UserFullName;
-            }            
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult UserMovieDetails()
         {
-            Session["IsAuthenticated"] = true;
-            var user = Session["User"] as User;
-            if (user != null)
-            {
-                ViewBag.UserId = user.Id;
-                ViewBag.UserName = user.UserName;
-                ViewBag.UserFullName = user.UserFullName;
-            }
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult UserMovieActivity()
         {
-            Session["IsAuthenticated"] = true;
-            var user = Session["User"] as User;
-            if (user != null)
-            {
-                ViewBag.UserId = user.Id;
-                ViewBag.UserName = user.UserName;
-                ViewBag.UserFullName = user.UserFullName;
-            }
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
@@ -76,8 +42,9 @@ namespace MovieTracker.Controllers
         {
             UserManager userManager = new UserManager();
 
-            userManager.InsertUser(new DAL.User { 
-                Id = userRegistration.Id, 
+            userManager.InsertUser(new DAL.User
+            {
+                Id = userRegistration.Id,
                 Password = Base64Encode(userRegistration.Password),
                 UserFullName = userRegistration.UserFullName,
                 UserName = userRegistration.UserName
@@ -92,7 +59,7 @@ namespace MovieTracker.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            ViewBag.Message = "Your contact page.";           
+            ViewBag.Message = "Your contact page.";
 
             return View();
         }
@@ -107,7 +74,8 @@ namespace MovieTracker.Controllers
 
             if (user != null && login.UserName == user.UserName && login.Password == Base64Decode(user.Password))
             {
-                Session["User"] = user;
+                Session["UserId"] = user.Id;
+                Session["UserFullName"] = user.UserFullName;
 
                 ModelState.Clear();
                 return RedirectToAction("Index");
@@ -122,8 +90,8 @@ namespace MovieTracker.Controllers
         [HttpGet]
         public ActionResult Logout()
         {
-            Session["IsAuthenticated"] = false;
-            Session["User"] = null;
+            Session["UserId"] = null;
+            Session["UserFullName"] = null;
             return RedirectToAction("Login");
         }
 

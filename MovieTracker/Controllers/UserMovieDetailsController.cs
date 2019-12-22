@@ -53,13 +53,14 @@ namespace MovieTracker.Controllers
 
             foreach (var item in userActivityManager.GetUserActivityByUserId(userId))
             {
-                userMovieActivity.Add(new UserMovieActivity {
+                userMovieActivity.Add(new UserMovieActivity
+                {
                     ActivityDetails = item.ActivityDetails,
                     ActivityOn = item.ActivityDateTime.ToString()
                 });
             }
 
-            return userMovieActivity;
+            return userMovieActivity.OrderByDescending(x => x.ActivityOn);
         }
 
         [HttpPost]
