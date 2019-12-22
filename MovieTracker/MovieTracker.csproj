@@ -147,11 +147,16 @@
     </Compile>
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\MovieDetailView.cs" />
+    <Compile Include="Models\UserMovieActivity.cs" />
     <Compile Include="Models\UserMovieDetailView.cs" />
     <Compile Include="Models\UserRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="angular\user-activity-details\app.js" />
+    <Content Include="angular\user-activity-details\controllers\controller.js" />
+    <Content Include="angular\user-activity-details\partials\main.html" />
+    <Content Include="angular\user-activity-details\services\service.js" />
     <Content Include="angular\user-movie-details\app.js" />
     <Content Include="angular\user-movie-details\controllers\controller.js" />
     <Content Include="angular\user-movie-details\partials\main.html" />
@@ -231,11 +236,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\UserMovieDetails\Create.cshtml" />
-    <Content Include="Views\UserMovieDetails\Delete.cshtml" />
-    <Content Include="Views\UserMovieDetails\Details.cshtml" />
-    <Content Include="Views\UserMovieDetails\Edit.cshtml" />
-    <Content Include="Views\UserMovieDetails\Index.cshtml" />
     <Content Include="webfonts\fa-brands-400.svg" />
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />

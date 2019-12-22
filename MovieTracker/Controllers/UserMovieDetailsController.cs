@@ -1,6 +1,7 @@
 ﻿using MovieTracker.DAL;
 using MovieTracker.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
@@ -43,6 +44,24 @@ namespace MovieTracker.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Controllers/UserMovieDetails/GetUserActivityDetails")]
+        public dynamic Get(int userId, int falseParam)
+        {
+            UserActivityManage userActivityManager = new UserActivityManage();
+            List<UserMovieActivity> userMovieActivity = new List<UserMovieActivity>();
+
+            foreach (var item in userActivityManager.GetUserActivityByUserId(userId))
+            {
+                userMovieActivity.Add(new UserMovieActivity {
+                    ActivityDetails = item.ActivityDetails,
+                    ActivityOn = item.ActivityDateTime.ToString()
+                });
+            }
+
+            return userMovieActivity;
+        }
+
         [HttpPost]
         [Route("Controllers/UserMovieDetails/UpdateUserMovieDetails")]
         public void Post(UserMovieDetailView data)
@@ -61,7 +80,7 @@ namespace MovieTracker.Controllers
                 ActivityDateTime = DateTime.Now
             };
 
-            if(data.StatusId == 2)
+            if (data.StatusId == 2)
                 userActivity.ActivityDetails = string.Format("Movie : {0} - status watched", data.MovieName);
             else
                 userActivity.ActivityDetails = string.Format("Movie : {0} - status watched to interested", data.MovieName);

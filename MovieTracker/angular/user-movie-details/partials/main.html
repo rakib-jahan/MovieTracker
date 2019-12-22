@@ -18,48 +18,57 @@
     }
 </style>
 
-<div class="form-inline" style="padding-top:25px;">
-    <div class="form-group">
-        <input class="form-control input-sm" type="text" ng-model="movieSearch.name" placeholder="Search by anything ...">
-    </div>
-</div>
+<div data-ng-if="umdc.movieList.length > 0">
 
-<div class="row row-margin-bottom row-margin-top">
-    <div class="col-md-4 no-padding lib-item" data-category="view" ng-repeat="row in umdc.movieList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter: movieSearch.name">
-        <div class="lib-panel">
-            <div class="row box-shadow no_margin">
-                <div class="col-md-5 no_padding">
-                    <img class="lib-img-show" src="{{row.Poster}}">
-                </div>
-                <div class="col-md-7" style="padding-left:0px;padding-right: 0px;">
-                    <i ng-class="{'fa-clock added-color': row.UserMovieDetailStatusId == 2, 'fa-clock add-color': row.UserMovieDetailStatusId == 1}"
-                       class="fa fa-2x"
-                       style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="UpdateUserMovieDetails(row)"></i>
-                    <div class="lib-row lib-header" title=" {{row.Title}}">
-                        {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
+    <div class="form-inline" style="padding-top:25px;">
+        <div class="form-group">
+            <input class="form-control input-sm" type="text" ng-model="movieSearch.name" placeholder="Search by anything ...">
+        </div>
+    </div>
+
+    <div class="row row-margin-bottom row-margin-top">
+        <div class="col-md-4 no-padding lib-item" data-category="view" ng-repeat="row in umdc.movieList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter: movieSearch.name">
+            <div class="lib-panel">
+                <div class="row box-shadow no_margin">
+                    <div class="col-md-5 no_padding">
+                        <img class="lib-img-show" src="{{row.Poster}}">
                     </div>
-                    <p class="lib-row" style="color: #9e9e9e;font-size: 14px;">
-                        <span class="">{{row.Year}}</span>&nbsp;|
-                        <span class="">{{row.Runtime}}</span>&nbsp;|&nbsp;
-                        <span class="">{{row.Genre}}</span>
-                    </p>
-                    <p class="lib-row" style="font-size:12px;font-weight:bold;">
-                        <span class="" style="color:gray;"><i class="fa fa-star" style="color:gold;margin-right:2px;"></i>{{row.ImdbRating}}</span>&nbsp;
-                        <span class="label label-success ng-binding" style="padding: 3px;margin-right: 3px;">{{row.Metascore}}</span>Metascore
-                    </p>
-                    <p class="lib-row" style="color: #9e9e9e;font-size: 12px;">
-                        <span class="">Director : {{row.Director}}</span>
-                    </p>
-                    <p class="lib-row" style="color: #9e9e9e;font-size: 12px;" title="{{row.Actors}}">
-                        <span class="">Actors : {{ row.Actors.length > 45 && row.Actors.substring(0, 45) + " ..." || row.Actors }}</span>
-                    </p>
-                    <div class="lib-row lib-desc" title="{{row.Plot}}">
-                        {{ row.Plot.length > 75 && row.Plot.substring(0, 75) + " ..." || row.Plot }}
+                    <div class="col-md-7" style="padding-left:0px;padding-right: 0px;">
+                        <i ng-class="{'fa-clock added-color': row.UserMovieDetailStatusId == 2, 'fa-clock add-color': row.UserMovieDetailStatusId == 1}"
+                           class="fa fa-2x"
+                           style="position: absolute;right: 5px;top: 5px; cursor:pointer" data-ng-click="UpdateUserMovieDetails(row)"></i>
+                        <div class="lib-row lib-header" title=" {{row.Title}}">
+                            {{ row.Title.length > 15 && row.Title.substring(0, 15) + " ..." || row.Title }}
+                        </div>
+                        <p class="lib-row" style="color: #9e9e9e;font-size: 14px;">
+                            <span class="">{{row.Year}}</span>&nbsp;|
+                            <span class="">{{row.Runtime}}</span>&nbsp;|&nbsp;
+                            <span class="">{{row.Genre}}</span>
+                        </p>
+                        <p class="lib-row" style="font-size:12px;font-weight:bold;">
+                            <span class="" style="color:gray;"><i class="fa fa-star" style="color:gold;margin-right:2px;"></i>{{row.ImdbRating}}</span>&nbsp;
+                            <span class="label label-success ng-binding" style="padding: 3px;margin-right: 3px;">{{row.Metascore}}</span>Metascore
+                        </p>
+                        <p class="lib-row" style="color: #9e9e9e;font-size: 12px;">
+                            <span class="">Director : {{row.Director}}</span>
+                        </p>
+                        <p class="lib-row" style="color: #9e9e9e;font-size: 12px;" title="{{row.Actors}}">
+                            <span class="">Actors : {{ row.Actors.length > 45 && row.Actors.substring(0, 45) + " ..." || row.Actors }}</span>
+                        </p>
+                        <div class="lib-row lib-desc" title="{{row.Plot}}">
+                            {{ row.Plot.length > 75 && row.Plot.substring(0, 75) + " ..." || row.Plot }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></ul>
+
 </div>
 
-<ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></ul>
+<div data-ng-if="umdc.movieList.length == 0" style="padding-top:25px;">
+    <h4> No record found. </h4>
+</div>
+

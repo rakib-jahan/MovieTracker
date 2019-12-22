@@ -1,7 +1,21 @@
-﻿
-@{
-    ViewBag.Title = "UserMovieActivity";
+﻿@{
+    ViewBag.Title = "Home Page";
 }
 
-<h2>UserMovieActivity</h2>
+<link href="~/Content/card.css" rel="stylesheet" />
 
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-ui-router.min.js"></script>
+<script src="~/Scripts/ui-bootstrap-tpls-2.5.0.min.js"></script>
+
+<script src="~/angular/user-activity-details/app.js"></script>
+<script src="~/angular/user-activity-details/services/service.js"></script>
+<script src="~/angular/user-activity-details/controllers/controller.js"></script>
+
+<script type="text/javascript">
+    var userId = "@ViewBag.UserId";
+</script>
+
+<div data-ng-app="app">
+    <div ui-view></div>
+</div>

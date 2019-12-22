@@ -1,0 +1,43 @@
+﻿<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<div data-ng-if="activityList.length > 0">
+
+    <div class="form-inline" style="padding-top:25px;">
+        <div class="form-group">
+            <input class="form-control input-sm" type="text" ng-model="activitySearch.name" placeholder="Search by anything ...">
+        </div>
+    </div>
+
+    <table style="width:800px;">
+        <tr>
+            <th style="width:600px;">Activity details</th>
+            <th>Activity on</th>
+        </tr>
+        <tr ng-repeat="row in activityList.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter: activitySearch.name">
+            <td>{{row.ActivityDetails}}</td>
+            <td>{{row.ActivityOn}}</td>
+        </tr>
+    </table>
+
+    <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></ul>
+
+</div>
+
+<div data-ng-if="activityList.length == 0"  style="padding-top:25px;">
+    <h4> No record found. </h4>
+</div>
